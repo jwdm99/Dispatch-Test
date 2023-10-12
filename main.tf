@@ -82,6 +82,7 @@ resource "azurerm_route_table" "rt-avd-prod-scus-01" {
   }
 }
 
+#Associates Route Table with Subnet
 resource "azurerm_subnet_route_table_association" "sn-rt-avd-prod-scus-01" {
   subnet_id      = azurerm_subnet.Subnet-AVD-Prod-SC-001.id
   route_table_id = azurerm_route_table.rt-avd-prod-scus-01.id
@@ -129,4 +130,58 @@ resource "azurerm_virtual_desktop_workspace" "DH-AVD-PROD" {
 resource "azurerm_virtual_desktop_workspace_application_group_association" "AVD-PROD-DAG" {
   workspace_id         = azurerm_virtual_desktop_workspace.DH-AVD-PROD.id
   application_group_id = azurerm_virtual_desktop_application_group.DH-AVD-PROD-DAG.id
+}
+
+#Create AVD Role
+resource "azurerm_role_assignment" "sg-avd-users-access-001" {
+  scope                = data.azurerm_subscription.primary.id
+  role_definition_name = "Desktop Virtualization User"
+  principal_id         = data.azurerm_client_config.example.object_id
+}
+
+resource "azurerm_virtual_desktop_host_pool_registration_info" "DH-AVD-PROD-REG" {
+  hostpool_id     = azurerm_virtual_desktop_host_pool.DH-AVD-PROD.id
+  expiration_date = "2023-10-25T19:14:28+00:00"
+}
+
+#Create NIC for "vm-avd-sc-p-6.dispatchhealth.local"
+resource "azurerm_network_interface" "vm-avd-sc-p-6-nic" {
+  name                = "vm-avd-sc-p-6-nic"
+  location            = azurerm_resource_group.rg-avd-prod-scus.location
+  resource_group_name = azurerm_resource_group.rg-avd-prod-scus.name
+
+  ip_configuration {
+    name                          = "ipconfig"
+    subnet_id                     = azurerm_subnet.Subnet-AVD-Prod-SC-001.id
+    private_ip_address_allocation = "Dynamic"
+  }
+
+  tags = {
+    environment = "dev"
+  }
+}
+
+#Creates Session Host
+resource "azurerm_windows_virtual_machine" "vm-avd-sc-p-6.dispatchhealth.local" {
+  name                = "vm-avd-sc-p-6.dispatchhealth.local"
+  location            = azurerm_resource_group.rg-avd-prod-scus.location
+  resource_group_name = azurerm_resource_group.rg-avd-prod-scus.name
+  size                = "Standard_DC2s_v2"
+  admin_username      = "superuser"
+  admin_password      = "Cust0mersf1rst!"
+  network_interface_ids = [
+    azurerm_network_interface.vm-avd-sc-p-6-nic.id,
+  ]
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  source_image_reference {
+    publisher = "MicrosoftWindowsDesktop"
+    offer     = "Windows-11"
+    sku       = "win11-22h2-pro"
+    version   = "latest"
+  }
 }
