@@ -238,11 +238,7 @@ resource "azurerm_virtual_machine_extension" "registersessionhost" {
         }
     }
     SETTINGS
-  protected_settings         = <<PROTECTED_SETTINGS
-    {
-
-    PROTECTED_SETTINGS
-
+    
   lifecycle {
     ignore_changes = [settings, protected_settings]
   }
