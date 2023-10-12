@@ -19,7 +19,7 @@ resource "azurerm_virtual_network" "vnet-avd-prod-scus" {
   }
 }
 
-#Create VNET Pairing to "avd-to-transit-hub"
+/*#Create VNET Pairing to "avd-to-transit-hub"
 resource "azurerm_virtual_network_peering" "avd-to-transit-hub" {
   name                      = "avd-to-transit-hub"
   resource_group_name       = azurerm_resource_group.rg-avd-prod-scus.name
@@ -41,7 +41,7 @@ resource "azurerm_virtual_network_peering" "AADDS-peer-AVD" {
   resource_group_name       = azurerm_resource_group.rg-avd-prod-scus.name
   virtual_network_name      = azurerm_virtual_network.vnet-avd-prod-scus.name
   remote_virtual_network_id = azurerm_virtual_network.DHVirtualNet.id
-}
+}*/
 
 #Create Subnet "Subnet-AVD-Prod-SC-001" seperatley from vnet-avd-prod-scus
 resource "azurerm_subnet" "Subnet-AVD-Prod-SC-001" {
