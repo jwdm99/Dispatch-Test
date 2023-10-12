@@ -219,7 +219,7 @@ auto_upgrade_minor_version = true
 
 resource "azurerm_virtual_machine_extension" "registersessionhost" {
   name                 = "registersessionhost"
-  virtual_machine_id   = azurerm_virtual_machine.vm-avd-sc-p-6.id
+  virtual_machine_id = azurerm_windows_virtual_machine.vm-avd-sc-p-6.id
   depends_on = [
     azurerm_virtual_machine_extension.aadlogin
   ]
