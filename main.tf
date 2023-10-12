@@ -203,7 +203,7 @@ resource "azuread_service_principal" "SP1" {
 
 # Create a user
 resource "azuread_user" "Test" {
-  user_principal_name = "Test"
+  user_principal_name = "test@JWMSpacelift.onmicrosoft.com"
   display_name        = "Test"
   password            = "AVD123"
 }
