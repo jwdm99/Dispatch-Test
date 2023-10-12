@@ -132,12 +132,12 @@ resource "azurerm_virtual_desktop_workspace_application_group_association" "AVD-
   application_group_id = azurerm_virtual_desktop_application_group.DH-AVD-PROD-DAG.id
 }
 
-#Create AVD Role
+/*#Create AVD Role
 resource "azurerm_role_assignment" "sg-avd-users-access-001" {
   scope                = data.azurerm_subscription.primary.id
   role_definition_name = "Desktop Virtualization User"
   principal_id         = data.azurerm_client_config.example.object_id
-}
+}*/
 
 resource "azurerm_virtual_desktop_host_pool_registration_info" "DH-AVD-PROD-REG" {
   hostpool_id     = azurerm_virtual_desktop_host_pool.DH-AVD-PROD.id
