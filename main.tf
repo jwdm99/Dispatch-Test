@@ -162,8 +162,8 @@ resource "azurerm_network_interface" "vm-avd-sc-p-6-nic" {
 }
 
 #Creates Session Host
-resource "azurerm_windows_virtual_machine" "vm-avd-sc-p-6.dispatchhealth" {
-  name                = "vm-avd-sc-p-6.dispatchhealth.local"
+resource "azurerm_windows_virtual_machine" "vm-avd-sc-p-6" {
+  name                = "vm-avd-sc-p-6"
   location            = azurerm_resource_group.rg-avd-prod-scus.location
   resource_group_name = azurerm_resource_group.rg-avd-prod-scus.name
   size                = "Standard_DC2s_v2"
