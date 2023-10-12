@@ -1,6 +1,6 @@
 #Create Resource Group "rg-avd-prod-scus"
 resource "azurerm_resource_group" "rg-avd-prod-scus" {
-  name     = "JWM-Terraform"
+  name     = "rg-avd-prod-scus"
   location = "South Central US"
   tags = {
     environment = "dev"
