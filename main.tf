@@ -216,3 +216,38 @@ type = "AADLoginForWindows"
 type_handler_version = "1.0"
 auto_upgrade_minor_version = true
 }
+
+resource "azurerm_virtual_machine_extension" "registersessionhost" {
+  name                 = "registersessionhost"
+  virtual_machine_id   = azurerm_virtual_machine.vm-avd-sc-p-6.id
+  depends_on = [
+    azurerm_virtual_machine_extension.aadlogin
+  ]
+  publisher            = "Microsoft.Powershell"
+  count                = "${var.vm_count}"
+  type = "DSC"
+  type_handler_version = "2.73"
+  auto_upgrade_minor_version = true
+  settings = <<SETTINGS
+    {
+        "ModulesUrl": "${var.artifactslocation}",
+        "ConfigurationFunction" : "Configuration.ps1\\AddSessionHost",
+        "Properties": {
+            "hostPoolName": "azurerm_virtual_desktop_host_pool.DH-AVD-PROD.name"
+            
+        }
+    }
+    SETTINGS
+        protected_settings = <<PROTECTED_SETTINGS
+    {
+      "properties" : {
+            "registrationInfoToken" : "azurerm_virtual_desktop_host_pool_registration_info.DH-AVD-PROD-REG.token"
+        }
+    }
+
+    PROTECTED_SETTINGS
+
+    lifecycle {
+        ignore_changes = [settings, protected_settings ]
+    }
+}
