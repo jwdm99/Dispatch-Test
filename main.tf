@@ -187,7 +187,7 @@ resource "azurerm_windows_virtual_machine" "vm-avd-sc-p-6" {
 }
 
 # Retrieve domain information
-data "azuread_domains" "67a6b159-2ceb-48cd-a023-cc670d5570d7" {
+data "azuread_domains" "primary" {
   only_initial = true
 }
 
