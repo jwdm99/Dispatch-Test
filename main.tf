@@ -230,20 +230,16 @@ resource "azurerm_virtual_machine_extension" "registersessionhost" {
   auto_upgrade_minor_version = true
   settings = <<SETTINGS
     {
-        "ModulesUrl": "${var.artifactslocation}",
-        "ConfigurationFunction" : "Configuration.ps1\\AddSessionHost",
-        "Properties": {
-            "hostPoolName": "azurerm_virtual_desktop_host_pool.DH-AVD-PROD.name"
-            
+        "modulesUrl": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration.zip",
+        "configurationFunction": "Configuration.ps1\\AddSessionHost",
+        "properties": {
+        "hostPoolName": "HostPoolNameGoesHere",
+        "registrationInfoToken": "${azurerm_virtual_desktop_host_pool.DH-AVD-PROD.DH-AVD-PROD-REG.token}"
         }
     }
     SETTINGS
         protected_settings = <<PROTECTED_SETTINGS
     {
-      "properties" : {
-            "registrationInfoToken" : "azurerm_virtual_desktop_host_pool_registration_info.DH-AVD-PROD-REG.token"
-        }
-    }
 
     PROTECTED_SETTINGS
 
