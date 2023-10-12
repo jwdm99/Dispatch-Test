@@ -136,7 +136,7 @@ resource "azurerm_virtual_desktop_workspace_application_group_association" "AVD-
 resource "azurerm_role_assignment" "sg-avd-users-access-001" {
   scope                = data.azurerm_subscription.primary.id
   role_definition_name = "Desktop Virtualization User"
-  principal_id         = data.azurerm_client_config.example.object_id
+  principal_id         = data.azurerm_client_config.sg-avd-users-access-001.object_id
 }*/
 
 resource "azurerm_virtual_desktop_host_pool_registration_info" "DH-AVD-PROD-REG" {
@@ -184,4 +184,35 @@ resource "azurerm_windows_virtual_machine" "vm-avd-sc-p-6" {
     sku       = "win11-22h2-pro"
     version   = "latest"
   }
+}
+
+# Retrieve domain information
+data "azuread_domains" "67a6b159-2ceb-48cd-a023-cc670d5570d7" {
+  only_initial = true
+}
+
+# Create an application
+resource "azuread_application" "APP1" {
+  display_name = "ExampleApp"
+}
+
+# Create a service principal
+resource "azuread_service_principal" "SP1" {
+  application_id = azuread_application.APP1.application_id
+}
+
+# Create a user
+resource "azuread_user" "Test" {
+  user_principal_name = "Test"
+  display_name        = "Test"
+  password            = "AVD123"
+}
+
+resource "azurerm_virtual_machine_extension" "aadlogin" {
+name = "AADLoginForWindows"
+virtual_machine_id = azurerm_windows_virtual_machine.vm-avd-sc-p-6.id
+publisher = "Microsoft.Azure.ActiveDirectory"
+type = "AADLoginForWindows"
+type_handler_version = "1.0"
+auto_upgrade_minor_version = true
 }
