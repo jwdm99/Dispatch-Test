@@ -186,10 +186,10 @@ resource "azurerm_windows_virtual_machine" "vm-avd-sc-p-6" {
   }
 }
 
-# Retrieve domain information
+/*# Retrieve domain information
 data "azuread_domains" "primary" {
   only_initial = true
-}
+}*/
 
 # Create an application
 resource "azuread_application" "APP1" {
