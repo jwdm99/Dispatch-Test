@@ -48,7 +48,6 @@ resource "azurerm_subnet" "Subnet-AVD-Prod-SC-001" {
   name                 = "Subnet-AVD-Prod-SC-001"
   resource_group_name  = azurerm_resource_group.rg-avd-prod-scus.name
   virtual_network_name = azurerm_virtual_network.vnet-avd-prod-scus.name
-  id            = azurerm_subnet.Subnet-AVD-Prod-SC-001.id
   address_prefixes     = ["10.21.4.0/24"]
 }
 
