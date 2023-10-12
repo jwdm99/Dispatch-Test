@@ -233,12 +233,12 @@ resource "azurerm_virtual_machine_extension" "registersessionhost" {
         "modulesUrl": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration.zip",
         "configurationFunction": "Configuration.ps1\\AddSessionHost",
         "properties": {
-        "hostPoolName": "HostPoolNameGoesHere",
+        "hostPoolName": "DH-AVD-PROD",
         "registrationInfoToken": "azurerm_virtual_desktop_host_pool.DH-AVD-PROD.DH-AVD-PROD-REG.token"
         }
     }
     SETTINGS
-    
+
   lifecycle {
     ignore_changes = [settings, protected_settings]
   }
