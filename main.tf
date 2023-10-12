@@ -209,41 +209,41 @@ resource "azuread_user" "Test" {
 }
 
 resource "azurerm_virtual_machine_extension" "aadlogin" {
-name = "AADLoginForWindows"
-virtual_machine_id = azurerm_windows_virtual_machine.vm-avd-sc-p-6.id
-publisher = "Microsoft.Azure.ActiveDirectory"
-type = "AADLoginForWindows"
-type_handler_version = "1.0"
-auto_upgrade_minor_version = true
+  name                       = "AADLoginForWindows"
+  virtual_machine_id         = azurerm_windows_virtual_machine.vm-avd-sc-p-6.id
+  publisher                  = "Microsoft.Azure.ActiveDirectory"
+  type                       = "AADLoginForWindows"
+  type_handler_version       = "1.0"
+  auto_upgrade_minor_version = true
 }
 
 resource "azurerm_virtual_machine_extension" "registersessionhost" {
-  name                 = "registersessionhost"
+  name               = "registersessionhost"
   virtual_machine_id = azurerm_windows_virtual_machine.vm-avd-sc-p-6.id
   depends_on = [
     azurerm_virtual_machine_extension.aadlogin
   ]
-  publisher            = "Microsoft.Powershell"
-  count                = "${var.vm_count}"
-  type = "DSC"
-  type_handler_version = "2.73"
+  publisher                  = "Microsoft.Powershell"
+  count                      = var.vm_count
+  type                       = "DSC"
+  type_handler_version       = "2.73"
   auto_upgrade_minor_version = true
-  settings = <<SETTINGS
+  settings                   = <<SETTINGS
     {
         "modulesUrl": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration.zip",
         "configurationFunction": "Configuration.ps1\\AddSessionHost",
         "properties": {
         "hostPoolName": "HostPoolNameGoesHere",
-        "registrationInfoToken": "${azurerm_virtual_desktop_host_pool.DH-AVD-PROD.DH-AVD-PROD-REG.token}"
+        "registrationInfoToken": "azurerm_virtual_desktop_host_pool.DH-AVD-PROD.DH-AVD-PROD-REG.token"
         }
     }
     SETTINGS
-        protected_settings = <<PROTECTED_SETTINGS
+  protected_settings         = <<PROTECTED_SETTINGS
     {
 
     PROTECTED_SETTINGS
 
-    lifecycle {
-        ignore_changes = [settings, protected_settings ]
-    }
+  lifecycle {
+    ignore_changes = [settings, protected_settings]
+  }
 }
