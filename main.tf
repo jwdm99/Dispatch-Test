@@ -230,7 +230,7 @@ resource "azurerm_virtual_machine_extension" "registersessionhost" {
   auto_upgrade_minor_version = true
   settings                   = <<SETTINGS
     {
-        "modulesUrl": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration.zip",
+        "modulesUrl": "https://github.com/jwdm99/Dispatch-Test.git/Configuration.ps1",
         "configurationFunction": "Configuration.ps1\\AddSessionHost",
         "properties": {
         "hostPoolName": "DH-AVD-PROD",
